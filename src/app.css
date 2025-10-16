@@ -23,7 +23,3 @@
 html {
 	background-color: var(--color-surface);
 }
-
-.dark html {
-	background-color: var(--color-surface-dark);
-}

@@ -94,11 +94,11 @@
 	<ImageCarousel images={galleryImages} />
 
 	<header
-		class="flex flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start dark:border-border-dark dark:bg-neutral-950/60"
+		class="flex flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start"
 	>
 		<div class="flex items-start gap-4">
 			<div
-				class="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-xs border border-border bg-white dark:border-border-dark dark:bg-neutral-900/80"
+				class="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-xs border border-border bg-white"
 			>
 				<img
 					src={app.logo}
@@ -110,20 +110,18 @@
 			</div>
 			<div class="flex flex-col gap-3">
 				<div class="flex flex-wrap items-center gap-2">
-					<h1
-						class="text-lg leading-tight font-semibold text-surface-foreground dark:text-surface-dark-foreground"
-					>
+					<h1 class="text-lg leading-tight font-semibold text-surface-foreground">
 						{app.name}
 					</h1>
 					{#if app.updatedAt}
 						<span
-							class="rounded-xs border border-border px-2 py-1 text-[11px] tracking-wide text-neutral-500 uppercase dark:border-border-dark dark:text-neutral-400"
+							class="rounded-xs border border-border px-2 py-1 text-[11px] tracking-wide text-neutral-500 uppercase"
 						>
 							{formatUpdatedAt(locale, app.updatedAt)}
 						</span>
 					{/if}
 				</div>
-				<p class="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
+				<p class="max-w-2xl text-sm leading-relaxed text-neutral-600">
 					{app.summary}
 				</p>
 				<PlatformBadges platforms={app.platforms} labels={dictionary.platformLabels} />
@@ -134,7 +132,7 @@
 			<div class="flex flex-wrap gap-2 md:justify-end">
 				{#if app.website}
 					<a
-						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200 dark:hover:border-accent"
+						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 						href={app.website}
 						target="_blank"
 						rel="noreferrer"
@@ -145,7 +143,7 @@
 				{/if}
 				{#if app.repo}
 					<a
-						class="dark:hover-border-accent inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 						href={app.repo}
 						target="_blank"
 						rel="noreferrer"
@@ -159,7 +157,7 @@
 			<div class="flex flex-wrap gap-2 md:justify-end">
 				<button
 					type="button"
-					class="dark:hover-border-accent inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+					class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 					onclick={shareApp}
 				>
 					<span aria-hidden="true">⇪</span>
@@ -167,7 +165,7 @@
 				</button>
 				<button
 					type="button"
-					class="dark:hover-border-accent inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+					class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 					onclick={copyLink}
 				>
 					<span aria-hidden="true">⧉</span>
@@ -177,7 +175,7 @@
 
 			{#if shareFeedback}
 				<p
-					class="rounded-xs border border-dashed border-border px-3 py-1 text-[11px] text-neutral-500 md:text-right dark:border-border-dark dark:text-neutral-400"
+					class="rounded-xs border border-dashed border-border px-3 py-1 text-[11px] text-neutral-500 md:text-right"
 				>
 					{shareFeedback}
 				</p>
@@ -186,14 +184,7 @@
 	</header>
 
 	{#if app.tags.length}
-		<section
-			class="rounded-sm border border-border bg-white/70 p-4 dark:border-border-dark dark:bg-neutral-950/60"
-		>
-			<h2
-				class="mb-3 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400"
-			>
-				{dictionary.detail.tags}
-			</h2>
+		<section class="rounded-sm border border-border bg-white/70 p-4">
 			<div class="flex flex-wrap gap-2">
 				{#each app.tags as tag}
 					<span class="chip lowercase">
@@ -204,28 +195,20 @@
 		</section>
 	{/if}
 
-	<section
-		class="rounded-sm border border-border bg-white/70 p-4 dark:border-border-dark dark:bg-neutral-950/60"
-	>
-		<h2
-			class="mb-3 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400"
-		>
+	<section class="rounded-sm border border-border bg-white/70 p-4">
+		<h2 class="mb-3 text-xs font-semibold tracking-wide text-neutral-500 uppercase">
 			{dictionary.detail.summary}
 		</h2>
 		<Markdown content={app.description} />
 	</section>
 
 	{#if data.similar.length}
-		<section
-			class="rounded-sm border border-border bg-white/70 p-4 dark:border-border-dark dark:bg-neutral-950/60"
-		>
+		<section class="rounded-sm border border-border bg-white/70 p-4">
 			<div class="mb-4 flex items-center justify-between">
-				<h2
-					class="text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400"
-				>
+				<h2 class="text-xs font-semibold tracking-wide text-neutral-500 uppercase">
 					{dictionary.detail.similar}
 				</h2>
-				<span class="text-[11px] text-neutral-400 dark:text-neutral-500">
+				<span class="text-[11px] text-neutral-400">
 					{data.similar.length}
 					{dictionary.list.countLabel}
 				</span>

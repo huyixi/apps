@@ -1,9 +1,7 @@
 <script lang="ts">
 	const props = $props<{ images?: string[]; interval?: number; autoplay?: boolean }>();
 	const slides = $derived(
-		(props.images ?? []).filter(
-			(source: string | undefined): source is string => Boolean(source)
-		)
+		(props.images ?? []).filter((source: string | undefined): source is string => Boolean(source))
 	);
 	const interval = $derived(props.interval ?? 4000);
 	const autoplay = $derived(props.autoplay ?? true);
@@ -59,7 +57,7 @@
 	const slideLabel = (position: number) => `Slide ${position} of ${slides.length}`;
 </script>
 
-<div class="relative overflow-hidden rounded-sm border border-border bg-white dark:border-border-dark dark:bg-neutral-950/40">
+<div class="relative overflow-hidden rounded-sm border border-border bg-white">
 	{#if slides.length}
 		<div class="aspect-[16/9]">
 			<div
@@ -67,9 +65,7 @@
 				style={`transform: translateX(-${index * 100}%);`}
 			>
 				{#each slides as source, slideIndex}
-					<div
-						class="flex h-full w-full flex-shrink-0 items-center justify-center bg-neutral-100 dark:bg-neutral-900/60"
-					>
+					<div class="flex h-full w-full flex-shrink-0 items-center justify-center bg-neutral-100">
 						<img
 							src={source}
 							alt={slideLabel(slideIndex + 1)}
@@ -85,7 +81,7 @@
 		{#if slides.length > 1}
 			<button
 				type="button"
-				class="group absolute left-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white/80 text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
+				class="group absolute top-1/2 left-3 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white/80 text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
 				onclick={goPrevious}
 				aria-label="Previous slide"
 			>
@@ -93,7 +89,7 @@
 			</button>
 			<button
 				type="button"
-				class="group absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white/80 text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
+				class="group absolute top-1/2 right-3 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white/80 text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
 				onclick={goNext}
 				aria-label="Next slide"
 			>
