@@ -9,6 +9,13 @@
 	import type { LayoutData } from './$types';
 
 	const THEME_STORAGE_KEY = 'apps-theme';
+	const categories = [
+		'All Products',
+		'Web apps',
+		'Mobile apps',
+		'Artificial Intelligence',
+		'Desktop apps'
+	];
 
 	const { data, children } = $props<{ data: LayoutData }>();
 
@@ -16,16 +23,13 @@
 	let hydrated = false;
 	let feedback = $state('');
 	let feedbackTimeout: ReturnType<typeof setTimeout> | null = null;
+	let mobileMenuOpen = $state(false);
 
 	const applyTheme = (value: 'light' | 'dark') => {
 		if (!browser) return;
 		theme = value;
 		document.documentElement.classList.toggle('dark', value === 'dark');
 		localStorage.setItem(THEME_STORAGE_KEY, value);
-	};
-
-	const toggleTheme = () => {
-		applyTheme(theme === 'dark' ? 'light' : 'dark');
 	};
 
 	const clearFeedback = () => {
@@ -64,7 +68,31 @@
 		return query ? `${pathname}?${query}` : pathname;
 	};
 
+	const categoryHref = (category: string) => {
+		const params = new URLSearchParams();
+		params.set('lang', data.locale);
+		if (category !== 'All Products') {
+			params.set('category', category);
+		}
+		return `/?${params.toString()}`;
+	};
+
+	const closeMobileMenu = () => {
+		mobileMenuOpen = false;
+	};
+
+	const toggleMobileMenu = () => {
+		mobileMenuOpen = !mobileMenuOpen;
+	};
+
 	const isActiveLocale = (value: Locale) => value === data.locale;
+
+	let currentCategory = $state('');
+	$effect(() => {
+		currentCategory = $page.url.searchParams.get('category') ?? 'All Products';
+	});
+
+	const isActiveCategory = (category: string) => currentCategory === category;
 
 	onMount(() => {
 		hydrated = true;
@@ -93,24 +121,39 @@
 <div
 	class="min-h-screen text-surface-foreground dark:bg-neutral-950 dark:text-surface-dark-foreground"
 >
-	<header class="sticky top-0 z-40 border-b border-border bg-white/80 backdrop-blur-sm dark:border-border-dark dark:bg-neutral-950/80">
-		<div class="mx-auto w-full max-w-screen-2xl px-4 py-4 md:px-8 md:py-5">
-			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-				<div class="flex flex-col gap-1">
-					<h1 class="text-base leading-tight font-semibold">{data.siteTitle}</h1>
-					<p class="max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">
-						{data.dictionary.tagline}
-					</p>
+	<header
+		class="sticky top-0 z-40 border-b border-border bg-white/80 backdrop-blur-sm dark:border-border-dark dark:bg-neutral-950/80"
+	>
+		<div class="relative mx-auto w-full max-w-screen-2xl px-4 py-4 md:px-8 md:py-5">
+			<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+				<div class="flex items-center justify-between gap-3 md:block">
+					<div class="flex flex-col gap-1">
+						<h1 class="text-base leading-tight font-semibold">{data.siteTitle}</h1>
+						<p class="hidden max-w-2xl text-sm text-neutral-600 md:block dark:text-neutral-300">
+							{data.dictionary.tagline}
+						</p>
+					</div>
+					<button
+						type="button"
+						class="inline-flex items-center gap-1 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent md:hidden dark:border-border-dark dark:text-neutral-200"
+						onclick={toggleMobileMenu}
+						aria-haspopup="true"
+						aria-expanded={mobileMenuOpen}
+						aria-controls="mobile-category-menu"
+					>
+						<span>Browse</span>
+						<span aria-hidden="true">{mobileMenuOpen ? '▴' : '▾'}</span>
+					</button>
 				</div>
-				<div class="flex flex-wrap items-center gap-2">
+				<div class="hidden flex-wrap items-center gap-2 md:flex">
 					<a
-						class="dark:hover-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+						class="dark:hover-border-accent focus-visible-border-accent dark-border-border-dark dark-text-neutral-200 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent"
 						href={langHref('/about')}
 					>
 						{data.dictionary.nav.about}
 					</a>
 					<a
-						class="dark:hover-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+						class="dark:hover-border-accent hover-border-accent hover-text-accent focus-visible-border-accent dark-border-border-dark dark-text-neutral-200 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors"
 						href="/rss.xml"
 						target="_blank"
 						rel="noreferrer"
@@ -120,7 +163,7 @@
 					</a>
 					<button
 						type="button"
-						class="dark:hover-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+						class="dark:hover-border-accent hover-border-accent hover-text-accent focus-visible-border-accent dark-border-border-dark dark-text-neutral-200 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors"
 						onclick={handleBookmark}
 						title={data.dictionary.nav.bookmarkDescription}
 					>
@@ -146,15 +189,6 @@
 							</button>
 						{/each}
 					</div>
-					<button
-						type="button"
-						class="dark:hover-border-accent inline-flex items-center gap-1 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
-						onclick={toggleTheme}
-						title={data.dictionary.nav.themeToggle}
-					>
-						<span aria-hidden="true">{theme === 'dark' ? '☾' : '☀︎'}</span>
-						<span class="hidden sm:inline">{data.dictionary.nav.themeToggle}</span>
-					</button>
 				</div>
 			</div>
 			{#if feedback}
@@ -164,26 +198,59 @@
 					{feedback}
 				</p>
 			{/if}
+			{#if mobileMenuOpen}
+				<div class="md:hidden">
+					<button
+						type="button"
+						class="fixed inset-0 z-30 bg-neutral-950/30"
+						aria-label="Close categories menu"
+						onclick={closeMobileMenu}
+					></button>
+					<div
+						class="absolute top-full right-4 z-40 mt-2 w-60 rounded-md border border-border bg-white p-2 shadow-xl dark:border-border-dark dark:bg-neutral-950"
+						id="mobile-category-menu"
+					>
+						<ul class="flex flex-col gap-1">
+							{#each categories as category}
+								<li>
+									<a
+										class={`flex items-center justify-between rounded-xs px-3 py-2 text-sm transition-colors ${isActiveCategory(category) ? 'text-accent' : 'text-neutral-700 hover:text-accent dark:text-neutral-200'}`}
+										href={categoryHref(category)}
+										onclick={closeMobileMenu}
+									>
+										<span>{category}</span>
+										<span aria-hidden="true">▸</span>
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				</div>
+			{/if}
 		</div>
 	</header>
 
-	<div class="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col border-x border-border md:flex-row dark:border-border-dark">
+	<div
+		class="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col border-x border-border md:flex-row dark:border-border-dark"
+	>
 		<aside
-			class="border-b border-border bg-white/80 px-4 py-6 backdrop-blur-sm md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:w-72 md:flex-shrink-0 md:border-b-0 md:border-r md:px-6 md:py-8 dark:border-border-dark dark:bg-neutral-950/70"
+			class="hidden border-b border-border bg-white/80 px-4 py-6 backdrop-blur-sm md:sticky md:top-0 md:block md:h-screen md:w-72 md:flex-shrink-0 md:border-r md:border-b-0 md:px-6 md:py-8 dark:border-border-dark dark:bg-neutral-950/70"
 			aria-label="Catalogue navigation"
 		>
-			<div class="flex h-full flex-col gap-6 overflow-y-auto">
+			<div class="flex flex-col gap-6 overflow-y-auto">
 				<div class="flex flex-col gap-3">
-					<span class="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+					<span
+						class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400"
+					>
 						Categories
 					</span>
 					<nav aria-label="Product categories">
 						<ul class="flex flex-col gap-2 text-xs font-medium">
-							{#each ['All Products', 'Web apps', 'Mobile apps', 'Artificial Intelligence', 'Desktop apps'] as category}
+							{#each categories as category}
 								<li>
 									<a
-										class="flex items-center justify-between rounded-xs border border-border px-3 py-1.5 text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
-										href={`/?lang=${data.locale}`}
+										class={`flex items-center justify-between rounded-xs border px-3 py-1.5 transition-colors ${isActiveCategory(category) ? 'border-accent text-accent dark:border-accent' : 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200'}`}
+										href={categoryHref(category)}
 									>
 										<span>{category}</span>
 									</a>
@@ -192,10 +259,16 @@
 						</ul>
 					</nav>
 				</div>
-				<div class="mt-auto flex flex-col gap-4 border-t border-border pt-4 text-xs leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400">
+				<div
+					class="mt-auto flex flex-col gap-4 border-t border-border pt-4 text-xs leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
+				>
 					<p>
-						App Stacks is designed & built by huyixi. For questions, suggestions, or inquiries, please contact me
-						<a class="ml-1 underline decoration-dotted underline-offset-2 transition-colors hover:text-accent" href="mailto:huyixi.dev@gmail.com">here</a>.
+						App Stacks is designed & built by huyixi. For questions, suggestions, or inquiries,
+						please contact me
+						<a
+							class="ml-1 underline decoration-dotted underline-offset-2 transition-colors hover:text-accent"
+							href="mailto:huyixi.dev@gmail.com">here</a
+						>.
 					</p>
 					<p>All rights reserved 2025</p>
 				</div>

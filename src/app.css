@@ -19,3 +19,11 @@
 	/* 圆角 token：以便使用 rounded-xs */
 	--radius-xs: 0.1875rem; /* 3px；按需调整 */
 }
+
+html {
+	background-color: var(--color-surface);
+}
+
+.dark html {
+	background-color: var(--color-surface-dark);
+}

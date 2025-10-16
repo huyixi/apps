@@ -17,7 +17,7 @@ module.exports = {
 		extend: {
 			colors: {
 				surface: {
-					DEFAULT: '#f8f8f8',
+					DEFAULT: '#f7f7f7',
 					foreground: '#111111',
 					muted: '#525252',
 					dark: '#121212',
