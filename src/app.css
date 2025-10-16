@@ -1,2 +1,21 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/typography';
+
+/* 1) 定义设计系统 token：颜色 & 圆角 */
+@theme {
+	/* Light 语义色 */
+	--color-surface: oklch(0.98 0 0); /* 类似 neutral-50 的浅底 */
+	--color-surface-foreground: oklch(0.26 0 0); /* 深字色，约 #3f3f46 */
+	--color-border: oklch(0.9 0 0); /* 分隔线/边框 */
+
+	/* 品牌/强调色（根据需要改成你的主色） */
+	--color-accent: oklch(0.64 0.23 262); /* 蓝紫色系强调 */
+	--color-accent-dark: oklch(0.58 0.24 262);
+
+	/* Dark 语义色 */
+	--color-surface-dark: oklch(0.2 0.03 262); /* 深底 */
+	--color-surface-dark-foreground: oklch(0.93 0.01 262); /* 亮字色 */
+	--color-border-dark: oklch(0.32 0.02 262); /* 暗边框 */
+
+	/* 圆角 token：以便使用 rounded-xs */
+	--radius-xs: 0.1875rem; /* 3px；按需调整 */
+}

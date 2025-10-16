@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+	<channel>
+		<title>huyixi's Apps</title>
+		<link>https://appstacks.huyixi.dev/</link>
+		<description>Curated catalogue of minimalist product stacks and tools.</description>
+		<language>en</language>
+		<item>
+			<title>FocusLane</title>
+			<link>https://appstacks.huyixi.dev/apps/focuslane</link>
+			<guid>focuslane</guid>
+			<description>Minimal pomodoro assistant for uninterrupted deep work sprints.</description>
+			<pubDate>Mon, 01 Sep 2025 08:00:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Nimbus Tasks</title>
+			<link>https://appstacks.huyixi.dev/apps/nimbus-tasks</link>
+			<guid>nimbus-tasks</guid>
+			<description>Calm task planner syncing seamlessly across every device.</description>
+			<pubDate>Wed, 10 Sep 2025 06:10:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>PromptPilot</title>
+			<link>https://appstacks.huyixi.dev/apps/prompt-pilot</link>
+			<guid>prompt-pilot</guid>
+			<description>Pilot prompts across models with structured experiments.</description>
+			<pubDate>Wed, 30 Jul 2025 09:45:00 GMT</pubDate>
+		</item>
+		<item>
+			<title>Atlas Radar</title>
+			<link>https://appstacks.huyixi.dev/apps/atlas-radar</link>
+			<guid>atlas-radar</guid>
+			<description>Competitive intelligence with live company signals.</description>
+			<pubDate>Mon, 08 Sep 2025 14:55:00 GMT</pubDate>
+		</item>
+	</channel>
+</rss>
