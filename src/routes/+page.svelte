@@ -2,7 +2,6 @@
 	import { AppCard } from '$lib';
 	import { page } from '$app/stores';
 	import type { Locale, UiDictionary } from '$lib/i18n';
-	import type { Platform } from '$lib/types';
 	import type { PageData } from './$types';
 
 	const { data } = $props<{ data: PageData }>();
@@ -12,8 +11,6 @@
 	const locale = $derived(pageData.data.locale as Locale);
 
 	const apps = $derived(data.apps);
-	const tags = $derived(data.tags);
-	const selectedPlatform = $derived(data.selectedPlatform as Platform | null);
 
 	const cardLabels = $derived({
 		openDetail: dictionary.card.openDetail,
@@ -21,18 +18,7 @@
 		repository: dictionary.card.repository
 	});
 
-	const resultSummary = $derived(`${apps.length} ${dictionary.list.countLabel}`);
-	const selectedPlatformLabel = $derived(
-		selectedPlatform
-			? dictionary.platformLabels[selectedPlatform]
-			: dictionary.list.allPlatforms
-	);
-
-	const tagHref = (tag: string) => {
-		const params = new URLSearchParams();
-		params.set('lang', locale);
-		return `/tags/${encodeURIComponent(tag)}?${params.toString()}`;
-	};
+	const collectionSummary = $derived(`${apps.length} ${dictionary.list.countLabel}`);
 </script>
 
 <svelte:head>
@@ -45,24 +31,10 @@
 >
 	<div class="flex flex-col gap-1">
 		<h2 class="text-sm font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
-			{dictionary.list.filteredBy}
+			{dictionary.list.countLabel}
 		</h2>
-		<div class="flex flex-wrap items-center gap-3 text-xs text-neutral-600 dark:text-neutral-300">
-			<span>{resultSummary}</span>
-			<span class="text-neutral-400">•</span>
-			<span>{selectedPlatformLabel}</span>
-		</div>
+		<span class="text-xs text-neutral-600 dark:text-neutral-300">{collectionSummary}</span>
 	</div>
-
-	{#if tags.length}
-		<div class="flex flex-wrap gap-2">
-			{#each tags as tag}
-				<a class="chip lowercase" href={tagHref(tag)} rel="noopener">
-					#{tag}
-				</a>
-			{/each}
-		</div>
-	{/if}
 </section>
 
 {#if apps.length}

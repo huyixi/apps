@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
-	import { AppCard, Markdown, PlatformBadges } from '$lib';
+	import { AppCard, ImageCarousel, Markdown, PlatformBadges } from '$lib';
 	import { formatUpdatedAt, type Locale, type UiDictionary } from '$lib/i18n';
 	import type { AppItem } from '$lib/types';
 	import type { PageData } from './$types';
@@ -17,6 +17,14 @@
 		openDetail: dictionary.card.openDetail,
 		website: dictionary.card.website,
 		repository: dictionary.card.repository
+	});
+
+	const galleryImages = $derived.by<string[]>(() => {
+		const screenshots = app.screenshots?.filter((value): value is string => Boolean(value));
+		if (screenshots && screenshots.length) {
+			return screenshots;
+		}
+		return [app.logo];
 	});
 
 	let shareFeedback = $state('');
@@ -74,12 +82,6 @@
 		}
 	};
 
-	const tagHref = (tag: string) => {
-		const params = new URLSearchParams();
-		params.set('lang', locale);
-		return `/tags/${encodeURIComponent(tag)}?${params.toString()}`;
-	};
-
 	onDestroy(clearShareFeedback);
 </script>
 
@@ -89,6 +91,8 @@
 </svelte:head>
 
 <article class="flex flex-col gap-6">
+	<ImageCarousel images={galleryImages} />
+
 	<header
 		class="flex flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start dark:border-border-dark dark:bg-neutral-950/60"
 	>
@@ -192,9 +196,9 @@
 			</h2>
 			<div class="flex flex-wrap gap-2">
 				{#each app.tags as tag}
-					<a class="chip lowercase" href={tagHref(tag)}>
+					<span class="chip lowercase">
 						#{tag}
-					</a>
+					</span>
 				{/each}
 			</div>
 		</section>

@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit';
-import { collectTags, fetchApps, parsePlatform } from '$lib/data/apps';
+import { fetchApps } from '$lib/data/apps';
 import type { AppItem } from '$lib/types';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch, url, parent }) => {
+export const load: PageLoad = async ({ fetch, parent }) => {
 	const parentData = await parent();
 	let allApps: AppItem[];
 	try {
@@ -13,15 +13,10 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 		throw error(500, message);
 	}
 
-	const platform = parsePlatform(url.searchParams.get('platform'));
-	const apps = platform ? allApps.filter((app) => app.platforms.includes(platform)) : allApps;
-
-	const tags = collectTags(allApps, parentData.locale);
+	const apps = allApps;
 
 	return {
 		apps,
-		selectedPlatform: platform,
-		tags,
 		meta: {
 			title: parentData.siteTitle,
 			description: parentData.siteDescription

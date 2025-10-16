@@ -11,6 +11,7 @@ export interface AppItem {
 	repo?: string;
 	tags: string[];
 	platforms: Platform[];
+	screenshots?: string[];
 	weight?: number;
 	updatedAt?: string;
 }
