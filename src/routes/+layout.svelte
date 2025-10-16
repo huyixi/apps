@@ -93,7 +93,7 @@
 <div
 	class="min-h-screen text-surface-foreground dark:bg-neutral-950 dark:text-surface-dark-foreground"
 >
-	<header class="border-b border-border bg-white/80 dark:border-border-dark dark:bg-neutral-950/70">
+	<header class="sticky top-0 z-40 border-b border-border bg-white/80 backdrop-blur-sm dark:border-border-dark dark:bg-neutral-950/80">
 		<div class="mx-auto w-full max-w-screen-2xl px-4 py-4 md:px-8 md:py-5">
 			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div class="flex flex-col gap-1">
@@ -167,54 +167,37 @@
 		</div>
 	</header>
 
-	<div
-		class="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col border-x border-border md:flex-row dark:border-border-dark"
-	>
+	<div class="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col border-x border-border md:flex-row dark:border-border-dark">
 		<aside
-			class="border-b border-border bg-white/70 px-4 py-6 md:w-72 md:flex-shrink-0 md:border-r md:border-b-0 md:px-6 md:py-8 dark:border-border-dark dark:bg-neutral-950/60"
-			aria-label={data.dictionary.sidebar.title}
+			class="border-b border-border bg-white/80 px-4 py-6 backdrop-blur-sm md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:w-72 md:flex-shrink-0 md:border-b-0 md:border-r md:px-6 md:py-8 dark:border-border-dark dark:bg-neutral-950/70"
+			aria-label="Catalogue navigation"
 		>
-			<div class="flex flex-col gap-6">
-				<div class="flex flex-col gap-2">
-					<span
-						class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400"
-					>
-						{data.dictionary.sidebar.title}
-					</span>
-					<p class="text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
-						{data.siteDescription}
-					</p>
-				</div>
+			<div class="flex h-full flex-col gap-6 overflow-y-auto">
 				<div class="flex flex-col gap-3">
-					<span
-						class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400"
-					>
-						{data.dictionary.sidebar.linksHeading}
+					<span class="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+						Categories
 					</span>
-					<nav aria-label={data.dictionary.sidebar.linksHeading}>
-						<ul class="flex flex-wrap gap-2 md:flex-col">
-							<li>
-								<a
-									class="dark:hover-border-accent flex items-center justify-between rounded-xs border border-border px-2 py-1 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
-									href={langHref('/about')}
-								>
-									<span>{data.dictionary.sidebar.about}</span>
-									<span aria-hidden="true">↗</span>
-								</a>
-							</li>
-							<li>
-								<a
-									class="dark:hover-border-accent flex items-center justify-between rounded-xs border border-border px-2 py-1 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
-									href="https://github.com/huyixi"
-									target="_blank"
-									rel="noreferrer"
-								>
-									<span>{data.dictionary.sidebar.github}</span>
-									<span aria-hidden="true">↗</span>
-								</a>
-							</li>
+					<nav aria-label="Product categories">
+						<ul class="flex flex-col gap-2 text-xs font-medium">
+							{#each ['All Products', 'Web apps', 'Mobile apps', 'Artificial Intelligence', 'Desktop apps'] as category}
+								<li>
+									<a
+										class="flex items-center justify-between rounded-xs border border-border px-3 py-1.5 text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+										href={`/?lang=${data.locale}`}
+									>
+										<span>{category}</span>
+									</a>
+								</li>
+							{/each}
 						</ul>
 					</nav>
+				</div>
+				<div class="mt-auto flex flex-col gap-4 border-t border-border pt-4 text-xs leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400">
+					<p>
+						App Stacks is designed & built by huyixi. For questions, suggestions, or inquiries, please contact me
+						<a class="ml-1 underline decoration-dotted underline-offset-2 transition-colors hover:text-accent" href="mailto:huyixi.dev@gmail.com">here</a>.
+					</p>
+					<p>All rights reserved 2025</p>
 				</div>
 			</div>
 		</aside>
