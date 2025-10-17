@@ -9,6 +9,8 @@ export interface UiDictionary {
 	siteDescription: string;
 	tagline: string;
 	nav: {
+		menu: string;
+		closeMenu: string;
 		about: string;
 		rss: string;
 		rssDescription: string;
@@ -77,6 +79,8 @@ const dictionaries: Record<Locale, UiDictionary> = {
 			'Curated app stack featuring minimalist, high-signal tools for building digital products.',
 		tagline: 'Minimalist catalogue of app building blocks and product stacks.',
 		nav: {
+			menu: 'Menu',
+			closeMenu: 'Close menu',
 			about: 'About',
 			rss: 'RSS',
 			rssDescription: 'Subscribe via RSS',
@@ -138,7 +142,7 @@ const dictionaries: Record<Locale, UiDictionary> = {
 		aboutPage: {
 			title: 'About this catalogue',
 			intro:
-				"This showcase follows the App Stacks format — pairing a left-hand platform filter with a right-hand catalogue so you can scan quickly and dive deeper when something resonates.",
+				'This showcase follows the App Stacks format — pairing a left-hand platform filter with a right-hand catalogue so you can scan quickly and dive deeper when something resonates.',
 			sections: [
 				{
 					title: 'Principles',
@@ -171,6 +175,8 @@ const dictionaries: Record<Locale, UiDictionary> = {
 		siteDescription: '面向产品团队的精选工具清单，聚焦极简而高价值的数字产品组件。',
 		tagline: '极简「应用栈」陈列：快速筛选、深入了解每个工具的独特之处。',
 		nav: {
+			menu: '菜单',
+			closeMenu: '关闭菜单',
 			about: '关于',
 			rss: 'RSS',
 			rssDescription: '订阅 RSS',
@@ -279,7 +285,8 @@ export const defaultLocale: Locale = 'en';
 export const isLocale = (value: string | null | undefined): value is Locale =>
 	!!value && locales.includes(value as Locale);
 
-export const getDictionary = (locale: Locale): UiDictionary => dictionaries[locale] ?? dictionaries.en;
+export const getDictionary = (locale: Locale): UiDictionary =>
+	dictionaries[locale] ?? dictionaries.en;
 
 export const formatUpdatedAt = (locale: Locale, iso?: string) => {
 	if (!iso) return '';

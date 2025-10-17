@@ -23,7 +23,14 @@
 	let feedback = $state('');
 	let feedbackTimeout: ReturnType<typeof setTimeout> | null = null;
 	let mobileMenuOpen = $state(false);
-	let desktopMenuOpen = $state(false);
+
+	const closeMobileMenu = () => {
+		mobileMenuOpen = false;
+	};
+
+	const toggleMobileMenu = () => {
+		mobileMenuOpen = !mobileMenuOpen;
+	};
 
 	const toId = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
@@ -47,6 +54,11 @@
 			feedback = '';
 			feedbackTimeout = null;
 		}, 4000);
+	};
+
+	const handleMobileBookmark = async () => {
+		await handleBookmark();
+		closeMobileMenu();
 	};
 
 	const changeLanguage = (nextLocale: Locale) => {
@@ -74,6 +86,7 @@
 
 	const handleLocaleSelect = (nextLocale: Locale) => {
 		changeLanguage(nextLocale);
+		closeMobileMenu();
 	};
 
 	const isActiveLocale = (value: Locale) => value === data.locale;
@@ -105,13 +118,24 @@
 
 	$effect(() => {
 		if (!browser || !hydrated) return;
-		if (desktopMenuOpen) {
+		if (mobileMenuOpen) {
 			previousBodyOverflow = document.body.style.overflow;
 			document.body.style.overflow = 'hidden';
 		} else {
 			document.body.style.overflow = previousBodyOverflow;
 		}
 	});
+
+	onMount(() => {
+		if (!browser) return;
+		hydrated = true;
+	});
+
+	const handleKeydown = (event: KeyboardEvent) => {
+		if (event.key === 'Escape' && mobileMenuOpen) {
+			closeMobileMenu();
+		}
+	};
 
 	onDestroy(() => {
 		if (!browser) return;
@@ -120,10 +144,12 @@
 
 	afterNavigate(() => {
 		if (!browser) return;
-		mobileMenuOpen = false;
+		closeMobileMenu();
 		window.scrollTo({ top: 0 });
 	});
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <svelte:head>
 	<title>{data.siteTitle}</title>
@@ -132,6 +158,13 @@
 </svelte:head>
 
 <div class="flex h-screen min-h-screen flex-col text-surface-foreground">
+	{#if mobileMenuOpen}
+		<div
+			class="fixed inset-0 z-30 bg-neutral-900/30 backdrop-blur-[1px] md:hidden"
+			aria-hidden="true"
+			onclick={closeMobileMenu}
+		></div>
+	{/if}
 	<header class="sticky top-0 z-40 border-b border-border bg-white/80 backdrop-blur-sm">
 		<div class="relative mx-auto w-full px-4 py-4 md:px-8 md:py-5">
 			<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -142,6 +175,39 @@
 							{data.dictionary.tagline}
 						</p>
 					</div>
+					<button
+						type="button"
+						class="inline-flex h-10 w-10 items-center justify-center rounded-xs border border-border text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent md:hidden"
+						onclick={toggleMobileMenu}
+						aria-expanded={mobileMenuOpen}
+						aria-controls="mobile-navigation"
+						aria-label={mobileMenuOpen ? data.dictionary.nav.closeMenu : data.dictionary.nav.menu}
+					>
+						<span class="sr-only">
+							{mobileMenuOpen ? data.dictionary.nav.closeMenu : data.dictionary.nav.menu}
+						</span>
+						{#if mobileMenuOpen}
+							<svg
+								class="h-5 w-5"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.8"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M6 18L18 6" />
+							</svg>
+						{:else}
+							<svg
+								class="h-5 w-5"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.8"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+							</svg>
+						{/if}
+					</button>
 				</div>
 				<div class="hidden items-center gap-2 md:flex">
 					<button
@@ -165,7 +231,7 @@
 										? 'bg-neutral-200 text-neutral-900'
 										: 'text-neutral-600 hover:text-accent'
 								}`}
-								onclick={() => changeLanguage(option)}
+								onclick={() => handleLocaleSelect(option)}
 								aria-pressed={isActiveLocale(option)}
 							>
 								{data.dictionary.nav.languageNames[option]}
@@ -174,6 +240,91 @@
 					</div>
 				</div>
 			</div>
+			{#if mobileMenuOpen}
+				<div id="mobile-navigation" class="absolute inset-x-0 top-full z-50 mt-3 md:hidden">
+					<div
+						class="mx-auto max-h-[80vh] w-full max-w-xl overflow-y-auto rounded-lg border border-border bg-white p-4 shadow-lg ring-1 ring-black/5"
+					>
+						<div class="flex flex-col gap-6 text-sm">
+							<div class="flex flex-col gap-3">
+								<span class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
+									Categories
+								</span>
+								<ul class="flex flex-col gap-2">
+									{#each categoryLinks as category}
+										<li>
+											<a
+												class={`flex items-center justify-between rounded-xs border px-3 py-2 transition-colors ${category.active ? 'border-accent text-accent' : 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent'}`}
+												href={category.href}
+												onclick={closeMobileMenu}
+											>
+												<span>{category.label}</span>
+											</a>
+										</li>
+									{/each}
+								</ul>
+							</div>
+							<div class="flex flex-col gap-3">
+								<span class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
+									Links
+								</span>
+								<ul class="flex flex-col gap-2">
+									{#each quickLinks as link}
+										<li>
+											<a
+												class="flex items-center justify-between rounded-xs border border-border px-3 py-2 text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
+												href={link.href}
+												target={link.external ? '_blank' : undefined}
+												rel={link.external ? 'noopener noreferrer' : undefined}
+												onclick={closeMobileMenu}
+											>
+												<span>{link.label}</span>
+											</a>
+										</li>
+									{/each}
+								</ul>
+							</div>
+							<div class="flex flex-col gap-3">
+								<span class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
+									{data.dictionary.nav.language}
+								</span>
+								<div
+									class="flex flex-wrap gap-2"
+									role="group"
+									aria-label={data.dictionary.nav.language}
+								>
+									{#each locales as option}
+										<button
+											type="button"
+											class={`rounded-xs px-3 py-1.5 text-xs font-semibold transition-colors ${
+												isActiveLocale(option)
+													? 'bg-neutral-200 text-neutral-900'
+													: 'text-neutral-600 hover:text-accent'
+											}`}
+											onclick={() => handleLocaleSelect(option)}
+											aria-pressed={isActiveLocale(option)}
+										>
+											{data.dictionary.nav.languageNames[option]}
+										</button>
+									{/each}
+								</div>
+							</div>
+							<div class="flex flex-col gap-3">
+								<span class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
+									Actions
+								</span>
+								<button
+									type="button"
+									class="w-full rounded-xs border border-border px-3 py-2 text-left text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
+									onclick={handleMobileBookmark}
+								>
+									{data.dictionary.nav.bookmark}
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			{/if}
 			{#if feedback}
 				<p
 					class="mt-3 rounded-xs border border-dashed border-border px-3 py-2 text-xs text-neutral-600"
