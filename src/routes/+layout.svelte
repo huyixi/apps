@@ -1,13 +1,12 @@
 <script lang="ts">
-import '../app.css';
-import { browser } from '$app/environment';
-import { afterNavigate, goto } from '$app/navigation';
-import { page } from '$app/stores';
-import { onMount } from 'svelte';
-import favicon from '$lib/assets/favicon.svg';
-import { locales, type Locale } from '$lib/i18n';
-import { MobileMenuSheet } from '$lib';
-import type { LayoutData } from './$types';
+	import '../app.css';
+	import { browser } from '$app/environment';
+	import { afterNavigate, goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { onDestroy, onMount } from 'svelte';
+	import favicon from '$lib/assets/favicon.svg';
+	import { locales, type Locale } from '$lib/i18n';
+	import type { LayoutData } from './$types';
 
 	const THEME_STORAGE_KEY = 'apps-theme';
 	const categories = [
@@ -24,6 +23,9 @@ import type { LayoutData } from './$types';
 	let feedback = $state('');
 	let feedbackTimeout: ReturnType<typeof setTimeout> | null = null;
 	let mobileMenuOpen = $state(false);
+	let desktopMenuOpen = $state(false);
+
+	const toId = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 	const clearFeedback = () => {
 		if (feedbackTimeout) {
@@ -70,18 +72,9 @@ import type { LayoutData } from './$types';
 		return `/?${params.toString()}`;
 	};
 
-const closeMobileMenu = () => {
-	mobileMenuOpen = false;
-};
-
-const toggleMobileMenu = () => {
-	mobileMenuOpen = !mobileMenuOpen;
-};
-
-const handleLocaleSelect = (nextLocale: Locale) => {
-	closeMobileMenu();
-	changeLanguage(nextLocale);
-};
+	const handleLocaleSelect = (nextLocale: Locale) => {
+		changeLanguage(nextLocale);
+	};
 
 	const isActiveLocale = (value: Locale) => value === data.locale;
 
@@ -90,26 +83,39 @@ const handleLocaleSelect = (nextLocale: Locale) => {
 		currentCategory = $page.url.searchParams.get('category') ?? 'All Products';
 	});
 
-const quickLinks = $derived([
-	{ label: data.dictionary.nav.about, href: langHref('/about'), icon: 'i', external: false },
-	{ label: data.dictionary.nav.rss, href: '/rss.xml', icon: 'RSS', external: true }
-]);
+	const quickLinks = $derived([
+		{ label: data.dictionary.nav.about, href: langHref('/about'), icon: 'i', external: false },
+		{ label: data.dictionary.nav.rss, href: '/rss.xml', icon: 'RSS', external: true }
+	]);
 
-const categoryLinks = $derived(
-	categories.map((label) => ({
-		label,
-		href: categoryHref(label),
-		active: currentCategory === label
-	}))
-);
-
-	onMount(() => {
-		hydrated = true;
-	});
+	const categoryLinks = $derived(
+		categories.map((label) => ({
+			label,
+			href: categoryHref(label),
+			active: currentCategory === label
+		}))
+	);
 
 	$effect(() => {
 		if (!browser || !hydrated) return;
 		document.documentElement.setAttribute('lang', data.locale);
+	});
+
+	let previousBodyOverflow = '';
+
+	$effect(() => {
+		if (!browser || !hydrated) return;
+		if (desktopMenuOpen) {
+			previousBodyOverflow = document.body.style.overflow;
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = previousBodyOverflow;
+		}
+	});
+
+	onDestroy(() => {
+		if (!browser) return;
+		document.body.style.overflow = previousBodyOverflow;
 	});
 
 	afterNavigate(() => {
@@ -137,22 +143,7 @@ const categoryLinks = $derived(
 						</p>
 					</div>
 				</div>
-				<div class="hidden flex-wrap items-center gap-2 md:flex">
-					<a
-						class="focus-visible-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent"
-						href={langHref('/about')}
-					>
-						{data.dictionary.nav.about}
-					</a>
-					<a
-						class="hover-border-accent hover-text-accent focus-visible-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors"
-						href="/rss.xml"
-						target="_blank"
-						rel="noreferrer"
-						title={data.dictionary.nav.rssDescription}
-					>
-						{data.dictionary.nav.rss}
-					</a>
+				<div class="hidden items-center gap-2 md:flex">
 					<button
 						type="button"
 						class="hover-border-accent hover-text-accent focus-visible-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors"
@@ -190,31 +181,8 @@ const categoryLinks = $derived(
 					{feedback}
 				</p>
 			{/if}
-		<MobileMenuSheet
-			dictionary={data.dictionary}
-			locales={locales}
-			activeLocale={data.locale}
-			onLocaleSelect={handleLocaleSelect}
-			bookmark={handleBookmark}
-			quickLinks={quickLinks}
-			categories={categoryLinks}
-			onClose={closeMobileMenu}
-			open={mobileMenuOpen}
-		/>
 		</div>
 	</header>
-
-<button
-	type="button"
-	class={`fixed right-4 bottom-6 z-50 inline-flex items-center gap-2 rounded-full border border-border bg-white/95 px-4 py-2 text-xs font-semibold text-neutral-700 shadow-lg md:hidden ${mobileMenuOpen ? 'border-accent text-accent shadow-accent/40' : ''}`}
-	onclick={toggleMobileMenu}
-	aria-haspopup="dialog"
-	aria-expanded={mobileMenuOpen}
-	aria-controls="mobile-navigation-dialog"
->
-	<span aria-hidden="true">{mobileMenuOpen ? '✕' : '☰'}</span>
-	<span>{mobileMenuOpen ? 'Close' : 'Menu'}</span>
-</button>
 
 	<div class=" flex w-full flex-1 flex-col overflow-auto border-x border-border md:flex-row">
 		<aside
@@ -227,20 +195,20 @@ const categoryLinks = $derived(
 				>
 					Categories
 				</span>
-			<nav aria-label="Product categories">
-				<ul class="flex flex-col gap-2 text-xs font-medium">
-					{#each categoryLinks as category}
-						<li>
-							<a
-								class={`flex items-center justify-between rounded-xs border px-3 py-1.5 transition-colors ${category.active ? 'border-accent text-accent' : 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent'}`}
-								href={category.href}
-							>
-								<span>{category.label}</span>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</nav>
+				<nav aria-label="Product categories">
+					<ul class="flex flex-col gap-2 text-xs font-medium">
+						{#each categoryLinks as category}
+							<li>
+								<a
+									class={`flex items-center justify-between rounded-xs border px-3 py-1.5 transition-colors ${category.active ? 'border-accent text-accent' : 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent'}`}
+									href={category.href}
+								>
+									<span>{category.label}</span>
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</nav>
 			</div>
 			<div
 				class="mt-auto border-t border-border pt-4 text-xs leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
