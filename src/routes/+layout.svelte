@@ -1,12 +1,13 @@
 <script lang="ts">
-	import '../app.css';
-	import { browser } from '$app/environment';
-	import { afterNavigate, goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
-	import favicon from '$lib/assets/favicon.svg';
-	import { locales, type Locale } from '$lib/i18n';
-	import type { LayoutData } from './$types';
+import '../app.css';
+import { browser } from '$app/environment';
+import { afterNavigate, goto } from '$app/navigation';
+import { page } from '$app/stores';
+import { onMount } from 'svelte';
+import favicon from '$lib/assets/favicon.svg';
+import { locales, type Locale } from '$lib/i18n';
+import { MobileMenuSheet } from '$lib';
+import type { LayoutData } from './$types';
 
 	const THEME_STORAGE_KEY = 'apps-theme';
 	const categories = [
@@ -69,23 +70,18 @@
 		return `/?${params.toString()}`;
 	};
 
-	const closeMobileMenu = () => {
-		mobileMenuOpen = false;
-	};
+const closeMobileMenu = () => {
+	mobileMenuOpen = false;
+};
 
-	const toggleMobileMenu = () => {
-		mobileMenuOpen = !mobileMenuOpen;
-	};
+const toggleMobileMenu = () => {
+	mobileMenuOpen = !mobileMenuOpen;
+};
 
-	const handleMobileBookmark = async () => {
-		await handleBookmark();
-		closeMobileMenu();
-	};
-
-	const handleLocaleSelect = (nextLocale: Locale) => {
-		closeMobileMenu();
-		changeLanguage(nextLocale);
-	};
+const handleLocaleSelect = (nextLocale: Locale) => {
+	closeMobileMenu();
+	changeLanguage(nextLocale);
+};
 
 	const isActiveLocale = (value: Locale) => value === data.locale;
 
@@ -94,7 +90,18 @@
 		currentCategory = $page.url.searchParams.get('category') ?? 'All Products';
 	});
 
-	const isActiveCategory = (category: string) => currentCategory === category;
+const quickLinks = $derived([
+	{ label: data.dictionary.nav.about, href: langHref('/about'), icon: 'i', external: false },
+	{ label: data.dictionary.nav.rss, href: '/rss.xml', icon: 'RSS', external: true }
+]);
+
+const categoryLinks = $derived(
+	categories.map((label) => ({
+		label,
+		href: categoryHref(label),
+		active: currentCategory === label
+	}))
+);
 
 	onMount(() => {
 		hydrated = true;
@@ -183,143 +190,31 @@
 					{feedback}
 				</p>
 			{/if}
-			{#if mobileMenuOpen}
-				<dialog
-					id="mobile-navigation-dialog"
-					open
-					class="fixed inset-0 z-40 flex items-center justify-center bg-neutral-950/50 backdrop-blur-sm"
-				>
-					<div class="absolute inset-0" role="presentation" onclick={closeMobileMenu}></div>
-					<div
-						class="relative z-10 max-h-[calc(100vh-3rem)] w-[min(22rem,_calc(100vw-2.5rem))] overflow-y-auto rounded-lg border border-border bg-white shadow-2xl ring-1 ring-border/60"
-						aria-modal="true"
-						aria-label="Mobile navigation"
-					>
-						<header class="flex items-center justify-between border-b border-border px-4 py-3">
-							<h2 class="text-sm font-semibold text-neutral-800">Browse</h2>
-							<button
-								type="button"
-								class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-neutral-500 transition-colors hover:text-accent"
-								onclick={closeMobileMenu}
-								aria-label="Close navigation menu"
-							>
-								✕
-							</button>
-						</header>
-						<div class="flex flex-col divide-y divide-border/70">
-							<div class="space-y-4 px-4 py-5">
-								<div class="space-y-3">
-									<p class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
-										Menu
-									</p>
-									<nav aria-label="Primary navigation" class="flex flex-col gap-2 text-sm">
-										<a
-											class="inline-flex items-center justify-between rounded-md border border-border px-3 py-2 text-neutral-700 transition-colors hover:border-accent hover:text-accent"
-											href={langHref('/about')}
-											onclick={closeMobileMenu}
-										>
-											{data.dictionary.nav.about}
-											<span aria-hidden="true">↗</span>
-										</a>
-										<a
-											class="inline-flex items-center justify-between rounded-md border border-border px-3 py-2 text-neutral-700 transition-colors hover:border-accent hover:text-accent"
-											href="/rss.xml"
-											target="_blank"
-											rel="noreferrer"
-											title={data.dictionary.nav.rssDescription}
-											onclick={closeMobileMenu}
-										>
-											{data.dictionary.nav.rss}
-											<span aria-hidden="true">RSS</span>
-										</a>
-										<button
-											type="button"
-											class="inline-flex items-center justify-between rounded-md border border-border px-3 py-2 text-left text-neutral-700 transition-colors hover:border-accent hover:text-accent"
-											onclick={handleMobileBookmark}
-										>
-											{data.dictionary.nav.bookmark}
-											<span aria-hidden="true">⧉</span>
-										</button>
-									</nav>
-								</div>
-								<div class="space-y-2">
-									<p class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
-										{data.dictionary.nav.language}
-									</p>
-									<div class="flex flex-wrap gap-2">
-										{#each locales as option}
-											<button
-												type="button"
-												class={`inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-semibold transition-colors ${
-													isActiveLocale(option)
-														? 'border-accent text-accent'
-														: 'border-border text-neutral-600 hover:border-accent hover:text-accent'
-												}`}
-												onclick={() => handleLocaleSelect(option)}
-											>
-												{data.dictionary.nav.languageNames[option]}
-											</button>
-										{/each}
-									</div>
-								</div>
-							</div>
-							<div class="space-y-3 px-4 py-5">
-								<p class="text-[11px] font-semibold tracking-wide text-neutral-500 uppercase">
-									Categories
-								</p>
-								<ul class="flex flex-col gap-2 text-xs font-medium">
-									{#each categories as category}
-										<li>
-											<a
-												class={`flex items-center justify-between rounded-md border px-3 py-1.5 transition-colors ${
-													isActiveCategory(category)
-														? 'border-accent text-accent'
-														: 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent'
-												}`}
-												href={categoryHref(category)}
-												onclick={closeMobileMenu}
-											>
-												<span>{category}</span>
-												<span
-													class={`text-[10px] font-semibold uppercase ${isActiveCategory(category) ? 'text-accent' : 'text-neutral-400'}`}
-													aria-hidden="true">▸</span
-												>
-											</a>
-										</li>
-									{/each}
-								</ul>
-							</div>
-							<footer
-								class="space-y-2 bg-neutral-50/60 px-4 py-4 text-xs leading-relaxed text-neutral-500"
-							>
-								<p>
-									App Stacks is designed & built by huyixi. For questions, suggestions, or
-									inquiries, please contact me
-									<a
-										class="ml-1 underline decoration-dotted underline-offset-2 transition-colors hover:text-accent"
-										href="mailto:huyixi.dev@gmail.com">here</a
-									>.
-								</p>
-								<p class="mt-2 font-medium text-neutral-400">All rights reserved 2025</p>
-							</footer>
-						</div>
-					</div>
-				</dialog>
-			{/if}
+		<MobileMenuSheet
+			dictionary={data.dictionary}
+			locales={locales}
+			activeLocale={data.locale}
+			onLocaleSelect={handleLocaleSelect}
+			bookmark={handleBookmark}
+			quickLinks={quickLinks}
+			categories={categoryLinks}
+			onClose={closeMobileMenu}
+			open={mobileMenuOpen}
+		/>
 		</div>
 	</header>
 
-	<button
-		type="button"
-		class={`fixed right-4 bottom-6 z-50 inline-flex items-center gap-2 rounded-full border border-border bg-white/95 px-4 py-2 text-xs font-semibold text-neutral-700 shadow-lg transition md:hidden ${mobileMenuOpen ? 'border-accent text-accent shadow-accent/40' : ''}`}
-		onclick={toggleMobileMenu}
-		aria-haspopup="dialog"
-		aria-expanded={mobileMenuOpen}
-		aria-controls="mobile-navigation-dialog"
-	>
-		<span aria-hidden="true">{mobileMenuOpen ? '✕' : '☰'}</span>
-		<span>{mobileMenuOpen ? 'Close' : 'Menu'}</span>
-	</button>
+<button
+	type="button"
+	class={`fixed right-4 bottom-6 z-50 inline-flex items-center gap-2 rounded-full border border-border bg-white/95 px-4 py-2 text-xs font-semibold text-neutral-700 shadow-lg md:hidden ${mobileMenuOpen ? 'border-accent text-accent shadow-accent/40' : ''}`}
+	onclick={toggleMobileMenu}
+	aria-haspopup="dialog"
+	aria-expanded={mobileMenuOpen}
+	aria-controls="mobile-navigation-dialog"
+>
+	<span aria-hidden="true">{mobileMenuOpen ? '✕' : '☰'}</span>
+	<span>{mobileMenuOpen ? 'Close' : 'Menu'}</span>
+</button>
 
 	<div class=" flex w-full flex-1 flex-col overflow-auto border-x border-border md:flex-row">
 		<aside
@@ -332,20 +227,20 @@
 				>
 					Categories
 				</span>
-				<nav aria-label="Product categories">
-					<ul class="flex flex-col gap-2 text-xs font-medium">
-						{#each categories as category}
-							<li>
-								<a
-									class={`flex items-center justify-between rounded-xs border px-3 py-1.5 transition-colors ${isActiveCategory(category) ? 'border-accent text-accent' : 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent'}`}
-									href={categoryHref(category)}
-								>
-									<span>{category}</span>
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</nav>
+			<nav aria-label="Product categories">
+				<ul class="flex flex-col gap-2 text-xs font-medium">
+					{#each categoryLinks as category}
+						<li>
+							<a
+								class={`flex items-center justify-between rounded-xs border px-3 py-1.5 transition-colors ${category.active ? 'border-accent text-accent' : 'border-border text-neutral-700 hover:border-accent hover:text-accent focus-visible:border-accent'}`}
+								href={category.href}
+							>
+								<span>{category.label}</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
 			</div>
 			<div
 				class="mt-auto border-t border-border pt-4 text-xs leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
