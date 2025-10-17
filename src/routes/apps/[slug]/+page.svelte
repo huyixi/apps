@@ -94,7 +94,7 @@
 	<ImageCarousel images={galleryImages} />
 
 	<header
-		class="flex flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start"
+		class=" mx-auto flex max-w-xl flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start"
 	>
 		<div class="flex items-start gap-4">
 			<div
@@ -184,7 +184,7 @@
 	</header>
 
 	{#if app.tags.length}
-		<section class="rounded-sm border border-border bg-white/70 p-4">
+		<section class="mx-auto max-w-xl rounded-sm border border-border bg-white/70 p-4">
 			<div class="flex flex-wrap gap-2">
 				{#each app.tags as tag}
 					<span class="chip lowercase">
@@ -195,7 +195,7 @@
 		</section>
 	{/if}
 
-	<section class="rounded-sm border border-border bg-white/70 p-4">
+	<section class="mx-auto max-w-xl rounded-sm border border-border bg-white/70 p-4">
 		<h2 class="mb-3 text-xs font-semibold tracking-wide text-neutral-500 uppercase">
 			{dictionary.detail.summary}
 		</h2>
@@ -203,7 +203,7 @@
 	</section>
 
 	{#if data.similar.length}
-		<section class="rounded-sm border border-border bg-white/70 p-4">
+		<section class="mx-auto max-w-xl rounded-sm border border-border bg-white/70 p-4">
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xs font-semibold tracking-wide text-neutral-500 uppercase">
 					{dictionary.detail.similar}
