@@ -27,7 +27,7 @@
 </svelte:head>
 
 {#if apps.length}
-	<section class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+	<section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
 		{#each apps as app (app.id)}
 			<AppCard {app} labels={cardLabels} platformLabels={dictionary.platformLabels} {locale} />
 		{/each}

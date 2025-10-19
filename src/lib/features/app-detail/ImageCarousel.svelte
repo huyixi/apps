@@ -6,6 +6,7 @@
 	const interval = $derived(props.interval ?? 4000);
 	const autoplay = $derived(props.autoplay ?? true);
 	let index = $state(0);
+	let paused = $state(false);
 	let timer: ReturnType<typeof setInterval> | null = null;
 
 	const clearTimer = () => {
@@ -40,9 +41,22 @@
 		}
 	});
 
+	const pause = () => {
+		if (!paused) {
+			paused = true;
+			clearTimer();
+		}
+	};
+
+	const resume = () => {
+		if (paused) {
+			paused = false;
+		}
+	};
+
 	$effect(() => {
 		clearTimer();
-		const shouldAutoplay = autoplay && slides.length > 1;
+		const shouldAutoplay = autoplay && slides.length > 1 && !paused;
 		if (!shouldAutoplay) return;
 
 		timer = setInterval(() => {
@@ -54,12 +68,31 @@
 		};
 	});
 
+	const handleFocusOut = (event: FocusEvent) => {
+		const container = event.currentTarget as HTMLElement | null;
+		const nextTarget = event.relatedTarget as Node | null;
+		if (container && nextTarget && container.contains(nextTarget)) {
+			return;
+		}
+
+		resume();
+	};
+
 	const slideLabel = (position: number) => `Slide ${position} of ${slides.length}`;
 </script>
 
-<div class="relative overflow-hidden rounded-sm border border-border bg-white">
+<div
+	class="relative overflow-hidden rounded-sm border border-border bg-white"
+	role="group"
+	aria-roledescription="carousel"
+	aria-label="App preview images"
+	onmouseenter={pause}
+	onmouseleave={resume}
+	onfocusin={pause}
+	onfocusout={handleFocusOut}
+>
 	{#if slides.length}
-		<div class="aspect-[16/9]">
+		<div class="aspect-[3/2]" aria-live={autoplay && !paused ? 'off' : 'polite'}>
 			<div
 				class="flex h-full w-full transition-transform duration-500 ease-out"
 				style={`transform: translateX(-${index * 100}%);`}
@@ -113,7 +146,7 @@
 		{/if}
 	{:else}
 		<div
-			class="flex aspect-[16/9] w-full items-center justify-center bg-neutral-100 text-xs text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400"
+			class="flex aspect-[3/2] w-full items-center justify-center bg-neutral-100 text-xs text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400"
 			aria-label="No preview images"
 		>
 			No previews available

@@ -91,7 +91,9 @@
 </svelte:head>
 
 <article class="flex flex-col gap-6">
-	<ImageCarousel images={galleryImages} />
+	<div class="mx-auto w-full max-w-3xl">
+		<ImageCarousel images={galleryImages} />
+	</div>
 
 	<header
 		class=" mx-auto flex max-w-xl flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start"

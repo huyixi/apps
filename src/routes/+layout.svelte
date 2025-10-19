@@ -378,7 +378,7 @@
 
 		<main
 			id="main-content"
-			class="flex-1 overflow-auto border-t border-border bg-white/80 px-4 py-6 md:border-t-0 md:border-l md:px-8 md:py-10"
+			class="flex-1 overflow-auto bg-white/80 px-4 py-6 md:border-t-0 md:px-8 md:py-10"
 		>
 			<div class="flex w-full flex-col gap-6">
 				{@render children?.()}
