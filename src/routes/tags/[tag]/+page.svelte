@@ -28,7 +28,7 @@
 </svelte:head>
 
 <section
-	class="flex flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 dark:border-border-dark dark:bg-neutral-950/60"
+	class="flex flex-col gap-4 rounded-sm border border-border p-4 dark:border-border-dark dark:bg-neutral-950/60"
 >
 	<div class="flex flex-wrap items-center justify-between gap-3">
 		<div class="flex flex-col gap-1">
@@ -42,7 +42,7 @@
 			</p>
 		</div>
 		<a
-			class="dark:hover-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
+			class="dark:hover-border-accent rounded-xs border border-border px-3 py-1.5 font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent dark:border-border-dark dark:text-neutral-200"
 			href={homeHref()}
 		>
 			{dictionary.list.allPlatforms}
@@ -58,7 +58,7 @@
 	</section>
 {:else}
 	<section
-		class="rounded-sm border border-dashed border-border bg-white/70 p-6 text-sm text-neutral-600 dark:border-border-dark dark:bg-neutral-950/60 dark:text-neutral-300"
+		class="rounded-sm border border-dashed border-border p-6 text-sm text-neutral-600 dark:border-border-dark dark:bg-neutral-950/60 dark:text-neutral-300"
 	>
 		{dictionary.list.empty}
 	</section>

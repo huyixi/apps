@@ -82,7 +82,7 @@
 </script>
 
 <div
-	class="relative overflow-hidden rounded-sm border border-border bg-white"
+	class="relative overflow-hidden rounded-sm border border-border"
 	role="group"
 	aria-roledescription="carousel"
 	aria-label="App preview images"
@@ -114,7 +114,7 @@
 		{#if slides.length > 1}
 			<button
 				type="button"
-				class="group absolute top-1/2 left-3 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white/80 text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
+				class="group absolute top-1/2 left-3 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
 				onclick={goPrevious}
 				aria-label="Previous slide"
 			>
@@ -122,7 +122,7 @@
 			</button>
 			<button
 				type="button"
-				class="group absolute top-1/2 right-3 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white/80 text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
+				class="group absolute top-1/2 right-3 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border text-neutral-600 transition-colors hover:text-accent focus-visible:outline-hidden dark:border-border-dark dark:bg-neutral-950/80 dark:text-neutral-300"
 				onclick={goNext}
 				aria-label="Next slide"
 			>
@@ -146,7 +146,7 @@
 		{/if}
 	{:else}
 		<div
-			class="flex aspect-[3/2] w-full items-center justify-center bg-neutral-100 text-xs text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400"
+			class="flex aspect-[3/2] w-full items-center justify-center bg-neutral-100 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400"
 			aria-label="No preview images"
 		>
 			No previews available

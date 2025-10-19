@@ -165,7 +165,7 @@
 			onclick={closeMobileMenu}
 		></div>
 	{/if}
-	<header class="sticky top-0 z-40 border-b border-border bg-white/80 backdrop-blur-sm">
+	<header class="sticky top-0 z-40 border-b border-border backdrop-blur-sm">
 		<div class="relative mx-auto w-full px-4 py-4 md:px-8 md:py-5">
 			<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
 				<div class="flex items-center justify-between gap-3 md:block">
@@ -212,21 +212,21 @@
 				<div class="hidden items-center gap-2 md:flex">
 					<button
 						type="button"
-						class="hover-border-accent hover-text-accent focus-visible-border-accent rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors"
+						class="hover-border-accent hover-text-accent focus-visible-border-accent rounded-xs px-3 py-1.5 font-medium text-neutral-700 transition-colors"
 						onclick={handleBookmark}
 						title={data.dictionary.nav.bookmarkDescription}
 					>
 						{data.dictionary.nav.bookmark}
 					</button>
 					<div
-						class="flex items-center gap-1 rounded-xs border border-border px-1 py-1"
+						class="flex items-center gap-1 rounded-xs px-1 py-1"
 						role="group"
 						aria-label={data.dictionary.nav.language}
 					>
 						{#each locales as option}
 							<button
 								type="button"
-								class={`rounded-xs px-2 py-1 text-xs font-semibold transition-colors ${
+								class={`rounded-xs px-2 py-1  font-semibold transition-colors ${
 									isActiveLocale(option)
 										? 'bg-neutral-200 text-neutral-900'
 										: 'text-neutral-600 hover:text-accent'
@@ -243,7 +243,7 @@
 			{#if mobileMenuOpen}
 				<div id="mobile-navigation" class="absolute inset-x-0 top-full z-50 mt-3 md:hidden">
 					<div
-						class="mx-auto max-h-[80vh] w-full max-w-xl overflow-y-auto rounded-lg border border-border bg-white p-4 shadow-lg ring-1 ring-black/5"
+						class="mx-auto max-h-[80vh] w-full max-w-xl overflow-y-auto rounded-lg border border-border p-4 shadow-lg ring-1 ring-black/5"
 					>
 						<div class="flex flex-col gap-6 text-sm">
 							<div class="flex flex-col gap-3">
@@ -296,7 +296,7 @@
 									{#each locales as option}
 										<button
 											type="button"
-											class={`rounded-xs px-3 py-1.5 text-xs font-semibold transition-colors ${
+											class={`rounded-xs px-3 py-1.5  font-semibold transition-colors ${
 												isActiveLocale(option)
 													? 'bg-neutral-200 text-neutral-900'
 													: 'text-neutral-600 hover:text-accent'
@@ -326,9 +326,7 @@
 				</div>
 			{/if}
 			{#if feedback}
-				<p
-					class="mt-3 rounded-xs border border-dashed border-border px-3 py-2 text-xs text-neutral-600"
-				>
+				<p class="mt-3 rounded-xs border border-dashed border-border px-3 py-2 text-neutral-600">
 					{feedback}
 				</p>
 			{/if}
@@ -337,7 +335,7 @@
 
 	<div class=" flex w-full flex-1 flex-col overflow-auto border-x border-border md:flex-row">
 		<aside
-			class="hidden border-r border-border bg-white/85 px-4 py-6 backdrop-blur-sm md:flex md:w-72 md:flex-shrink-0 md:flex-col md:space-y-6"
+			class="hidden border-r border-border px-4 py-6 backdrop-blur-sm md:flex md:w-72 md:flex-shrink-0 md:flex-col md:space-y-6"
 			aria-label="Catalogue navigation"
 		>
 			<div class="space-y-3">
@@ -347,7 +345,7 @@
 					Categories
 				</span>
 				<nav aria-label="Product categories">
-					<ul class="flex flex-col gap-2 text-xs font-medium">
+					<ul class="flex flex-col gap-2 font-medium">
 						{#each categoryLinks as category}
 							<li>
 								<a
@@ -362,7 +360,7 @@
 				</nav>
 			</div>
 			<div
-				class="mt-auto border-t border-border pt-4 text-xs leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
+				class="mt-auto border-t border-border pt-4 leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
 			>
 				<p>
 					App Stacks is designed & built by huyixi. For questions, suggestions, or inquiries, please
@@ -376,10 +374,7 @@
 			</div>
 		</aside>
 
-		<main
-			id="main-content"
-			class="flex-1 overflow-auto bg-white/80 px-4 py-6 md:border-t-0 md:px-8 md:py-10"
-		>
+		<main id="main-content" class="flex-1 overflow-auto px-4 py-6 md:border-t-0 md:px-8 md:py-10">
 			<div class="flex w-full flex-col gap-6">
 				{@render children?.()}
 			</div>

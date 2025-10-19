@@ -34,7 +34,7 @@
 	</section>
 {:else}
 	<section
-		class="rounded-sm border border-dashed border-border bg-white/70 p-6 text-sm text-neutral-600 dark:border-border-dark dark:bg-neutral-950/60 dark:text-neutral-300"
+		class="rounded-sm border border-dashed border-border p-6 text-sm text-neutral-600 dark:border-border-dark dark:bg-neutral-950/60 dark:text-neutral-300"
 	>
 		{dictionary.list.empty}
 	</section>

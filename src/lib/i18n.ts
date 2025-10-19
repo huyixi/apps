@@ -84,7 +84,7 @@ const dictionaries: Record<Locale, UiDictionary> = {
 			about: 'About',
 			rss: 'RSS',
 			rssDescription: 'Subscribe via RSS',
-			bookmark: 'Bookmark',
+			bookmark: '⌘+D to Bookmark',
 			bookmarkDescription: 'Save this catalogue for quick reference',
 			bookmarkNotice: 'Link copied — press Ctrl + D (⌘ + D on macOS) to bookmark.',
 			bookmarkFallback: 'Press Ctrl + D (⌘ + D on macOS) to add a bookmark manually.',

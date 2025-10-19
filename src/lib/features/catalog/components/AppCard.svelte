@@ -54,7 +54,7 @@
 				</h3>
 			</div>
 
-			<p class="text-xs leading-relaxed text-neutral-600">
+			<p class=" leading-relaxed text-neutral-600">
 				{app.summary}
 			</p>
 		</div>

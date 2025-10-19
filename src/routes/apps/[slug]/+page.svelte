@@ -96,11 +96,11 @@
 	</div>
 
 	<header
-		class=" mx-auto flex max-w-xl flex-col gap-4 rounded-sm border border-border bg-white/70 p-4 md:flex-row md:items-start"
+		class=" mx-auto flex max-w-xl flex-col gap-4 rounded-sm border border-border p-4 md:flex-row md:items-start"
 	>
 		<div class="flex items-start gap-4">
 			<div
-				class="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-xs border border-border bg-white"
+				class="flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-xs border border-border"
 			>
 				<img
 					src={app.logo}
@@ -134,7 +134,7 @@
 			<div class="flex flex-wrap gap-2 md:justify-end">
 				{#if app.website}
 					<a
-						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
+						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 						href={app.website}
 						target="_blank"
 						rel="noreferrer"
@@ -145,7 +145,7 @@
 				{/if}
 				{#if app.repo}
 					<a
-						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
+						class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 						href={app.repo}
 						target="_blank"
 						rel="noreferrer"
@@ -159,7 +159,7 @@
 			<div class="flex flex-wrap gap-2 md:justify-end">
 				<button
 					type="button"
-					class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
+					class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 					onclick={shareApp}
 				>
 					<span aria-hidden="true">⇪</span>
@@ -167,7 +167,7 @@
 				</button>
 				<button
 					type="button"
-					class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
+					class="inline-flex items-center gap-2 rounded-xs border border-border px-3 py-1.5 font-medium text-neutral-700 transition-colors hover:border-accent hover:text-accent focus-visible:border-accent"
 					onclick={copyLink}
 				>
 					<span aria-hidden="true">⧉</span>
@@ -186,7 +186,7 @@
 	</header>
 
 	{#if app.tags.length}
-		<section class="mx-auto max-w-xl rounded-sm border border-border bg-white/70 p-4">
+		<section class="mx-auto max-w-xl rounded-sm border border-border p-4">
 			<div class="flex flex-wrap gap-2">
 				{#each app.tags as tag}
 					<span class="chip lowercase">
@@ -197,17 +197,17 @@
 		</section>
 	{/if}
 
-	<section class="mx-auto max-w-xl rounded-sm border border-border bg-white/70 p-4">
-		<h2 class="mb-3 text-xs font-semibold tracking-wide text-neutral-500 uppercase">
+	<section class="mx-auto max-w-xl rounded-sm border border-border p-4">
+		<h2 class="mb-3 font-semibold tracking-wide text-neutral-500 uppercase">
 			{dictionary.detail.summary}
 		</h2>
 		<Markdown content={app.description} />
 	</section>
 
 	{#if data.similar.length}
-		<section class="mx-auto max-w-xl rounded-sm border border-border bg-white/70 p-4">
+		<section class="mx-auto max-w-xl rounded-sm border border-border p-4">
 			<div class="mb-4 flex items-center justify-between">
-				<h2 class="text-xs font-semibold tracking-wide text-neutral-500 uppercase">
+				<h2 class=" font-semibold tracking-wide text-neutral-500 uppercase">
 					{dictionary.detail.similar}
 				</h2>
 				<span class="text-[11px] text-neutral-400">
@@ -228,7 +228,7 @@
 		</section>
 	{:else}
 		<section
-			class="rounded-sm border border-dashed border-border bg-white/60 p-6 text-sm text-neutral-500 dark:border-border-dark dark:bg-neutral-950/50 dark:text-neutral-400"
+			class="rounded-sm border border-dashed border-border p-6 text-sm text-neutral-500 dark:border-border-dark dark:bg-neutral-950/50 dark:text-neutral-400"
 		>
 			{dictionary.detail.similarEmpty}
 		</section>
