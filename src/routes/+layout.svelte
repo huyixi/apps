@@ -360,13 +360,13 @@
 				</nav>
 			</div>
 			<div
-				class="mt-auto border-t border-border pt-4 leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
+				class="mt-auto p-2 text-sm leading-relaxed text-neutral-500 dark:border-border-dark dark:text-neutral-400"
 			>
 				<p>
-					App Stacks is designed & built by huyixi. For questions, suggestions, or inquiries, please
-					contact me
-					<a
-						class="ml-1 underline decoration-dotted underline-offset-2 transition-colors hover:text-accent"
+					This site is designed & built by
+					<a class="text-accent" href="https://huyixi.com">huyixi</a>. For questions, suggestions,
+					or inquiries, please contact me<a
+						class="ml-1 text-accent transition-colors"
 						href="mailto:huyixi.dev@gmail.com">here</a
 					>.
 				</p>

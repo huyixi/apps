@@ -8,7 +8,7 @@
 	--color-border: #d2d2d2; /* 分隔线/边框 */
 
 	/* 品牌/强调色（根据需要改成你的主色） */
-	--color-accent: oklch(0.64 0.23 262); /* 蓝紫色系强调 */
+	--color-accent: #0099ff; /* 蓝紫色系强调 */
 	--color-accent-dark: oklch(0.58 0.24 262);
 
 	/* Dark 语义色 */
