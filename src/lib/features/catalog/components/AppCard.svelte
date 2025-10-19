@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Locale } from '$lib/i18n';
-	import type { AppItem, Platform } from '$lib/types';
+	import type { AppItem } from '$lib/types';
 
 	type CardLabels = {
 		openDetail: string;
@@ -14,12 +14,6 @@
 		repository: 'Repository',
 		website: 'Website'
 	};
-	export let platformLabels: Record<Platform, string> = {
-		'Web apps': 'Web apps',
-		'iOS apps': 'iOS apps',
-		'android apps': 'android apps',
-		'desktop apps': 'desktop apps'
-	};
 	export let locale: Locale = 'en';
 
 	const detailHref = () => {
@@ -29,9 +23,9 @@
 	};
 </script>
 
-<article class="card group h-full">
+<article class="h-full">
 	<a
-		class="flex flex-col gap-2"
+		class="group flex h-full flex-col gap-2 rounded-[18px] border border-transparent bg-transparent p-4 transition-[background-color,border-color] duration-200 ease-out hover:border-accent/60 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-accent/40"
 		href={detailHref()}
 		aria-label={`${labels.openDetail}: ${app.name}`}
 	>
@@ -54,7 +48,7 @@
 				</h3>
 			</div>
 
-			<p class=" leading-relaxed text-neutral-600">
+			<p class="leading-relaxed text-neutral-600">
 				{app.summary}
 			</p>
 		</div>

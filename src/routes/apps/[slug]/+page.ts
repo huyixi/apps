@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { fetchApps, findBySlug, findSimilar } from '$lib/data/apps';
+import { fetchApps, findBySlug } from '$lib/data/apps';
 import type { AppItem } from '$lib/types';
 import type { PageLoad } from './$types';
 
@@ -10,7 +10,8 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
 	try {
 		allApps = await fetchApps(fetch);
 	} catch (exception) {
-		const message = exception instanceof Error ? exception.message : 'Unable to load apps catalogue.';
+		const message =
+			exception instanceof Error ? exception.message : 'Unable to load apps catalogue.';
 		throw error(500, message);
 	}
 
@@ -19,11 +20,8 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
 		throw error(404, 'App not found.');
 	}
 
-	const similar = findSimilar(allApps, app);
-
 	return {
 		app,
-		similar,
 		meta: {
 			title: `${app.name} · ${parentData.siteTitle}`,
 			description: app.summary

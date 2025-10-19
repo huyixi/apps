@@ -8,7 +8,6 @@ export {
 	collectTags,
 	fetchApps,
 	findBySlug,
-	findSimilar,
 	parsePlatform,
 	platformList,
 	platformSet,

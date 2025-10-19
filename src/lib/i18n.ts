@@ -129,7 +129,7 @@ const dictionaries: Record<Locale, UiDictionary> = {
 			website: 'Website',
 			repo: 'Repository',
 			similar: 'Similar apps',
-			similarEmpty: 'No similar apps surfaced yet.',
+			similarEmpty: 'No similar apps found yet.',
 			share: 'Share',
 			shareCopy: 'Copy link',
 			shareCopied: 'Link copied to clipboard.',

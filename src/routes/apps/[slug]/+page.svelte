@@ -12,6 +12,8 @@
 	const dictionary = $derived($page.data.dictionary as UiDictionary);
 	const locale = $derived($page.data.locale as Locale);
 	const app = $derived(data.app as AppItem);
+	const tags = $derived((app.tags ?? []) as string[]);
+	const similarApps = $derived(Array.isArray(data.similar) ? (data.similar as AppItem[]) : []);
 
 	const cardLabels = $derived({
 		openDetail: dictionary.card.openDetail,
@@ -185,10 +187,10 @@
 		</div>
 	</header>
 
-	{#if app.tags.length}
+	{#if tags.length}
 		<section class="mx-auto max-w-xl rounded-sm border border-border p-4">
 			<div class="flex flex-wrap gap-2">
-				{#each app.tags as tag}
+				{#each tags as tag}
 					<span class="chip lowercase">
 						#{tag}
 					</span>
@@ -204,25 +206,20 @@
 		<Markdown content={app.description} />
 	</section>
 
-	{#if data.similar.length}
+	{#if similarApps.length}
 		<section class="mx-auto max-w-xl rounded-sm border border-border p-4">
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class=" font-semibold tracking-wide text-neutral-500 uppercase">
 					{dictionary.detail.similar}
 				</h2>
 				<span class="text-[11px] text-neutral-400">
-					{data.similar.length}
+					{similarApps.length}
 					{dictionary.list.countLabel}
 				</span>
 			</div>
 			<div class="grid gap-3 md:grid-cols-2">
-				{#each data.similar as item (item.id)}
-					<AppCard
-						app={item}
-						labels={cardLabels}
-						platformLabels={dictionary.platformLabels}
-						{locale}
-					/>
+				{#each similarApps as item (item.id)}
+					<AppCard app={item} labels={cardLabels} {locale} />
 				{/each}
 			</div>
 		</section>
